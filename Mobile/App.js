@@ -16,7 +16,7 @@ function MyStack() {
         initialRouteName="GerarDieta"
         screenOptions={{
           headerShown: false,
-          cardStyle: { backgroundColor: "#E6E3F6" },
+          cardStyle: { backgroundColor: "#E6E3F5" },
         }}
       >
         <Stack.Screen name="Main" component={Main} />

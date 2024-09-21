@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Text,
   ScrollView,
+  TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
@@ -50,7 +51,11 @@ export default function GerarDieta() {
         <View style={styles.box}>
           <Text style={styles.txtBox_h1}>Proteínas:</Text>
           <View style={styles.campo_escreAq}>
-            <Text style={styles.txt_escreAq}>Escreva aqui</Text>
+            <TextInput
+              style={styles.txt_escreAq}
+              placeholder="escreva aqui"
+              placeholderTextColor="#E5E3F6"
+            />
             <TouchableOpacity style={styles.btEnviar}>
               <Image
                 source={require("../../../assets/botaoEnviar.png")}
@@ -58,13 +63,53 @@ export default function GerarDieta() {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.txt_area_proteinas}></View>
+          <ScrollView
+            style={styles.txt_area_proteinas}
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            {/* Conteúdo rolável para proteínas */}
+            <View style={styles.conteiner_ScrollView}>
+              <View style={styles.item_id1}>
+                <Text style={styles.txt_item_id1}>Frango</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../../assets/BtCancelar.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.item_id1}>
+                <Text style={styles.txt_item_id1}>Carne moida</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../../assets/BtCancelar.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.item_id1}>
+                <Text style={styles.txt_item_id1}>Peixe</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../../assets/BtCancelar.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
         </View>
 
         <View style={styles.box}>
           <Text style={styles.txtBox_h1}>Carboidratos:</Text>
           <View style={styles.campo_escreAq}>
-            <Text style={styles.txt_escreAq}>Escreva aqui</Text>
+            <TextInput
+              style={styles.txt_escreAq}
+              placeholder="escreva aqui"
+              placeholderTextColor="#E5E3F6"
+            />
             <TouchableOpacity style={styles.btEnviar}>
               <Image
                 source={require("../../../assets/botaoEnviar.png")}
@@ -72,13 +117,43 @@ export default function GerarDieta() {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.txt_area_carboidratos}></View>
+          <ScrollView
+            style={styles.txt_area_carboidratos}
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            {/* Conteúdo rolável para carboidratos */}
+            <View style={styles.conteiner_ScrollView}>
+              <View style={styles.item_id1}>
+                <Text style={styles.txt_item_id1}>Arroz</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../../assets/BtCancelar.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.item_id1}>
+                <Text style={styles.txt_item_id1}>Pão integral</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../../assets/BtCancelar.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
         </View>
 
         <View style={styles.box}>
           <Text style={styles.txtBox_h1}>Vegetais e Legumes:</Text>
           <View style={styles.campo_escreAq}>
-            <Text style={styles.txt_escreAq}>Escreva aqui</Text>
+            <TextInput
+              style={styles.txt_escreAq}
+              placeholder="escreva aqui"
+              placeholderTextColor="#E5E3F6"
+            />
             <TouchableOpacity style={styles.btEnviar}>
               <Image
                 source={require("../../../assets/botaoEnviar.png")}
@@ -86,13 +161,22 @@ export default function GerarDieta() {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.txt_area_vejetais_legumes}></View>
+          <ScrollView
+            style={styles.txt_area_vegetais_legumes}
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            {/* Conteúdo rolável para vegetais e legumes */}
+          </ScrollView>
         </View>
 
         <View style={styles.box}>
           <Text style={styles.txtBox_h1}>Frutas:</Text>
           <View style={styles.campo_escreAq}>
-            <Text style={styles.txt_escreAq}>Escreva aqui</Text>
+            <TextInput
+              style={styles.txt_escreAq}
+              placeholder="escreva aqui"
+              placeholderTextColor="#E5E3F6"
+            />
             <TouchableOpacity style={styles.btEnviar}>
               <Image
                 source={require("../../../assets/botaoEnviar.png")}
@@ -100,13 +184,22 @@ export default function GerarDieta() {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.txt_area_frutas}></View>
+          <ScrollView
+            style={styles.txt_area_frutas}
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            {/* Conteúdo rolável para frutas */}
+          </ScrollView>
         </View>
 
         <View style={styles.box}>
           <Text style={styles.txtBox_h1}>Doces:</Text>
           <View style={styles.campo_escreAq}>
-            <Text style={styles.txt_escreAq}>Escreva aqui</Text>
+            <TextInput
+              style={styles.txt_escreAq}
+              placeholder="escreva aqui"
+              placeholderTextColor="#E5E3F6"
+            />
             <TouchableOpacity style={styles.btEnviar}>
               <Image
                 source={require("../../../assets/botaoEnviar.png")}
@@ -114,13 +207,22 @@ export default function GerarDieta() {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.txt_area_doces}></View>
+          <ScrollView
+            style={styles.txt_area_doces}
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            {/* Conteúdo rolável para doces */}
+          </ScrollView>
         </View>
 
         <View style={styles.box}>
           <Text style={styles.txtBox_h1}>Outros:</Text>
           <View style={styles.campo_escreAq}>
-            <Text style={styles.txt_escreAq}>Escreva aqui</Text>
+            <TextInput
+              style={styles.txt_escreAq}
+              placeholder="escreva aqui"
+              placeholderTextColor="#E5E3F6"
+            />
             <TouchableOpacity style={styles.btEnviar}>
               <Image
                 source={require("../../../assets/botaoEnviar.png")}
@@ -128,7 +230,12 @@ export default function GerarDieta() {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.txt_area_outros}></View>
+          <ScrollView
+            style={styles.txt_area_outros}
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            {/* Conteúdo rolável para outros */}
+          </ScrollView>
         </View>
 
         <TouchableOpacity style={styles.gerarButton}>
@@ -192,13 +299,116 @@ const styles = StyleSheet.create({
   },
 
   campo_escreAq: {
-    backgroundColor: "red",
+    marginTop: 10,
+    backgroundColor: "white",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 20,
-    justifyContent: "space-evenly",
+    borderRadius: 12,
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    height: 35,
+    width: "70%",
+    marginBottom: 20,
   },
 
-  btEnviar: {},
+  btEnviar: {
+    backgroundColor: "#E5E3F6",
+    padding: 5,
+    borderRadius: 30,
+  },
+
+  txt_escreAq: {
+    color: "#E5E3F6",
+    fontSize: 18,
+    fontFamily: "BreeSerif_400Regular",
+  },
+
+  txt_area_proteinas: {
+    width: "100%",
+    height: 150,
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 10,
+  },
+
+  txt_area_carboidratos: {
+    width: "100%",
+    height: 150,
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 10,
+  },
+
+  txt_area_vegetais_legumes: {
+    width: "100%",
+    height: 150,
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 10,
+  },
+
+  txt_area_frutas: {
+    width: "100%",
+    height: 150,
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 10,
+  },
+
+  txt_area_doces: {
+    width: "100%",
+    height: 150,
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 10,
+  },
+
+  txt_area_outros: {
+    width: "100%",
+    height: 150,
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 10,
+  },
+
+  gerarButton: {
+    backgroundColor: "#5A58C9",
+    width: "100%",
+    padding: 20,
+    borderRadius: 15,
+    alignItems: "center",
+  },
+
+  gerarButtonText: {
+    color: "#E5E3F6",
+    fontSize: 24,
+    fontFamily: "BreeSerif_400Regular",
+  },
+
+  txt_item_id1: {
+    color: "white",
+    fontSize: 18,
+    fontFamily: "BreeSerif_400Regular",
+    marginRight: 10,
+  },
+
+  item_id1: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    borderRadius: 15,
+    backgroundColor: "#E6E3F6",
+    marginHorizontal: 5,
+    marginVertical: 5,
+  },
+
+  conteiner_ScrollView: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
 });
