@@ -30,10 +30,16 @@ export default function GerarDieta() {
             resizeMode="contain"
           />
           <View style={styles.nav_links}>
-            <TouchableOpacity style={styles.touchableopacity_header}>
+            <TouchableOpacity
+              style={styles.touchableopacity_header}
+              onPress={() => navigation.navigate("Home")}
+            >
               <Text style={styles.txt_links}>Home</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.touchableopacity_header}>
+            <TouchableOpacity
+              style={styles.touchableopacity_header}
+              onPress={() => navigation.navigate("Perfil")}
+            >
               <Text style={styles.txt_links}>Perfil</Text>
             </TouchableOpacity>
           </View>
@@ -66,9 +72,70 @@ export default function GerarDieta() {
           <ScrollView
             style={styles.txt_area_proteinas}
             contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
           >
             {/* Conteúdo rolável para proteínas */}
             <View style={styles.conteiner_ScrollView}>
+              <View style={styles.item_id1}>
+                <Text style={styles.txt_item_id1}>Frango</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../../assets/BtCancelar.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.item_id1}>
+                <Text style={styles.txt_item_id1}>Carne moida</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../../assets/BtCancelar.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.item_id1}>
+                <Text style={styles.txt_item_id1}>Peixe</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../../assets/BtCancelar.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.item_id1}>
+                <Text style={styles.txt_item_id1}>Frango</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../../assets/BtCancelar.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.item_id1}>
+                <Text style={styles.txt_item_id1}>Carne moida</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../../assets/BtCancelar.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.item_id1}>
+                <Text style={styles.txt_item_id1}>Peixe</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../../assets/BtCancelar.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+
               <View style={styles.item_id1}>
                 <Text style={styles.txt_item_id1}>Frango</Text>
                 <TouchableOpacity>
@@ -120,6 +187,7 @@ export default function GerarDieta() {
           <ScrollView
             style={styles.txt_area_carboidratos}
             contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
           >
             {/* Conteúdo rolável para carboidratos */}
             <View style={styles.conteiner_ScrollView}>
@@ -164,6 +232,7 @@ export default function GerarDieta() {
           <ScrollView
             style={styles.txt_area_vegetais_legumes}
             contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
           >
             {/* Conteúdo rolável para vegetais e legumes */}
           </ScrollView>
@@ -187,6 +256,7 @@ export default function GerarDieta() {
           <ScrollView
             style={styles.txt_area_frutas}
             contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
           >
             {/* Conteúdo rolável para frutas */}
           </ScrollView>
@@ -210,6 +280,7 @@ export default function GerarDieta() {
           <ScrollView
             style={styles.txt_area_doces}
             contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
           >
             {/* Conteúdo rolável para doces */}
           </ScrollView>
@@ -233,6 +304,7 @@ export default function GerarDieta() {
           <ScrollView
             style={styles.txt_area_outros}
             contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
           >
             {/* Conteúdo rolável para outros */}
           </ScrollView>
@@ -373,11 +445,12 @@ const styles = StyleSheet.create({
   },
 
   gerarButton: {
-    backgroundColor: "#5A58C9",
+    backgroundColor: "#B5B2C6",
     width: "100%",
     padding: 20,
     borderRadius: 15,
     alignItems: "center",
+    marginBottom: 100,
   },
 
   gerarButtonText: {

@@ -32,7 +32,10 @@ export default function Home() {
             <TouchableOpacity style={styles.touchableopacity_header}>
               <Text style={styles.txt_links}>Home</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.touchableopacity_header}>
+            <TouchableOpacity
+              style={styles.touchableopacity_header}
+              onPress={() => navigation.navigate("Perfil")}
+            >
               <Text style={styles.txt_links}>Perfil</Text>
             </TouchableOpacity>
           </View>
@@ -46,7 +49,10 @@ export default function Home() {
       <View style={styles.container_body}>
         <View style={styles.up_body}>
           <Text style={styles.txt_msm_usuario}>Olá ?????</Text>
-          <TouchableOpacity style={styles.bt_gerar_dieta}>
+          <TouchableOpacity
+            style={styles.bt_gerar_dieta}
+            onPress={() => navigation.navigate("GerarDieta")}
+          >
             <Text style={styles.txt_bt_gerarDieta}>Gerar Dieta</Text>
           </TouchableOpacity>
         </View>
@@ -193,8 +199,14 @@ const styles = StyleSheet.create({
     height: 250,
     backgroundColor: "#e4e0f2",
     borderRadius: 24,
-    elevation: 5,
     marginBottom: 30,
+    // Sombra Android
+    elevation: 5,
+    // Sombra IOS
+    shadowColor: "#0002",
+    shadowOffset: { width: 3, height: 4 },
+    shadowOpacity: 3,
+    shadowRadius: 4,
   },
 
   conteiner_peso: {
@@ -202,8 +214,14 @@ const styles = StyleSheet.create({
     height: 170,
     backgroundColor: "#e4e0f2",
     borderRadius: 24,
-    elevation: 5,
     marginBottom: 30,
+    // Sombra Android
+    elevation: 5,
+    // Sombra IOS
+    shadowColor: "#0002",
+    shadowOffset: { width: 3, height: 4 },
+    shadowOpacity: 3,
+    shadowRadius: 4,
   },
 
   conteiner_refeicao: {
@@ -211,8 +229,14 @@ const styles = StyleSheet.create({
     height: 130,
     backgroundColor: "#e4e0f2",
     borderRadius: 24,
-    elevation: 5,
     marginBottom: 30,
+    // Sombra Android
+    elevation: 5,
+    // Sombra IOS
+    shadowColor: "#0002",
+    shadowOffset: { width: 3, height: 4 },
+    shadowOpacity: 3,
+    shadowRadius: 4,
   },
 
   body_refeicao: {
