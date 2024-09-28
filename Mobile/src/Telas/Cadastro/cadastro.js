@@ -14,7 +14,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-
 export default function Cadastro() {
   const navigation = useNavigation();
   const [fontsLoaded] = useFonts({

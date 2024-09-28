@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   container_header: {
     width: "80%",
     alignItems: "center",
-    marginTop: 100,
+    marginTop: 80,
   },
 
   touchableopacity_header: {
