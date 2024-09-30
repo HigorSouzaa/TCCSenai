@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Image, TouchableOpacity, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  Text,
+  ImageBackground,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
 
@@ -66,18 +73,57 @@ export default function Perfil() {
 
       <View style={styles.body}>
         <Text style={styles.txt_nome}>Breno A. Silva</Text>
-        <View style={styles.conteiner_bt1}>
-          <Text styler={styles.txtBt}>Edite seu Perfil</Text>
-        </View>
-        <View style={styles.conteiner_bt2}>
-          <Text styler={styles.txtBt}>Minhas Informações</Text>
-        </View>
-        <View style={styles.conteiner_bt3}>
-          <Text styler={styles.txtBt}>Dieta diária</Text>
-        </View>
-        <View style={styles.conteiner_btSalvar}>
-          <Text styler={styles.txtBt}>Sair da conta</Text>
-        </View>
+        <TouchableOpacity>
+          <ImageBackground
+            source={require("../../../assets/background1.png")} // Substitua pelo caminho da sua imagem
+            style={styles.conteiner_bt1}
+          >
+            <View style={styles.bt_editPerfil}>
+              <Image
+                source={require("../../../assets/editImg.png")}
+                resizeMode="cover"
+              ></Image>
+            </View>
+            <Text style={styles.txtBt}>Edite seu Perfil</Text>
+          </ImageBackground>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <ImageBackground
+            source={require("../../../assets/background2.png")} // Substitua pelo caminho da sua imagem
+            style={styles.conteiner_bt2}
+          >
+            <View style={styles.bt_editPerfil}>
+              <Image
+                source={require("../../../assets/perfilImg.png")}
+                resizeMode="cover"
+              ></Image>
+            </View>
+            <Text style={styles.txtBt}>Minhas Informações</Text>
+          </ImageBackground>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <ImageBackground
+            source={require("../../../assets/background3.png")} // Substitua pelo caminho da sua imagem
+            style={styles.conteiner_bt3}
+          >
+            <View style={styles.bt_editPerfil}>
+              <Image
+                source={require("../../../assets/dieta.png")}
+                resizeMode="cover"
+              ></Image>
+            </View>
+            <Text style={styles.txtBt}>Dieta Diária</Text>
+          </ImageBackground>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.conteiner_btSalvar}>
+          <View style={styles.bt_sair}>
+            <Image
+              source={require("../../../assets/sairBt.png")}
+              resizeMode="contain"
+            ></Image>
+          </View>
+          <Text style={styles.txtBt}>Sair da conta</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -119,7 +165,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     width: "90%",
     height: 400,
-    borderWidth: 0.5,
+    // borderWidth: 0.5,
+    // backgroundColor: "red",
   },
 
   outerBorder: {
@@ -196,6 +243,70 @@ const styles = StyleSheet.create({
   txt_nome: {
     color: "#fff",
     fontSize: 34,
+    fontFamily: "BreeSerif_400Regular",
+    marginBottom: 10,
+  },
+
+  conteiner_bt1: {
+    width: 309,
+    display: "flex",
+    flexDirection: "row",
+    height: 80,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  conteiner_bt2: {
+    width: 347,
+    display: "flex",
+    flexDirection: "row",
+    height: 80,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  conteiner_bt3: {
+    width: 241,
+    display: "flex",
+    flexDirection: "row",
+    height: 80,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  bt_sair: {
+    width: 50,
+    height: 50,
+    borderColor: "#fff",
+    borderWidth: 2,
+    alignItems: "center",
+    borderRadius: 25,
+    justifyContent: "center",
+  },
+
+  conteiner_btSalvar: {
+    backgroundColor: "#B4B1C3",
+    width: "70%",
+    borderRadius: 50,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  bt_editPerfil: {
+    backgroundColor: "#B4B1C3",
+    width: 51,
+    height: 51,
+    borderRadius: 26,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#fff",
+  },
+
+  txtBt: {
+    left: 12,
+    color: "#fff",
+    fontSize: 28,
     fontFamily: "BreeSerif_400Regular",
   },
 });
