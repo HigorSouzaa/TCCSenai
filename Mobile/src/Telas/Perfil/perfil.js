@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Text,
   ImageBackground,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
@@ -48,8 +49,9 @@ export default function Perfil() {
       </View>
 
       <View style={styles.outerBorder}>
-        {/* Parte superior esquerda da borda */}
-        <View style={styles.topLeftPart}></View>
+        {/* Parte superior esquerda da borda - Só Android */}
+        {Platform.OS === "android" && <View style={styles.topLeftPart}></View>}
+        {/* Outras partes do seu layout */}
 
         {/* Parte restante da borda */}
         <View style={styles.remainderBorder}></View>
@@ -73,7 +75,7 @@ export default function Perfil() {
 
       <View style={styles.body}>
         <Text style={styles.txt_nome}>Breno A. Silva</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("EditarPerfil")}>
           <ImageBackground
             source={require("../../../assets/background1.png")} // Substitua pelo caminho da sua imagem
             style={styles.conteiner_bt1}
@@ -186,7 +188,7 @@ const styles = StyleSheet.create({
     width: "50%", // metade do círculo
     height: "50%",
     borderTopLeftRadius: 100, // arredondado apenas no topo esquerdo
-    borderWidth: 6,
+    borderWidth: 10,
     borderColor: "#D5D3DD", // cor da parte superior esquerda
     borderBottomWidth: 0, // remove a borda inferior
     borderRightWidth: 0, // remove a borda direita
