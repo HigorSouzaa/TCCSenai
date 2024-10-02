@@ -1,3 +1,4 @@
+// Cadastro.js
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -5,36 +6,79 @@ import {
   Image,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
   TouchableOpacity,
-  Alert,
+  Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { auth, db } from '../../Config/Firebase/firebase'; // Verifique o caminho aqui
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export default function Cadastro() {
   const navigation = useNavigation();
-  const [fontsLoaded] = useFonts({
-    BreeSerif_400Regular,
-  });
+  const [fontsLoaded] = useFonts({ BreeSerif_400Regular });
 
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   if (!fontsLoaded) {
-    return null; // Pode adicionar um componente de carregamento aqui se necessário
+    return null; // Adicionar componente de carregamento opcional
   }
 
-  const handleSignUp = () => {
-    if (password !== confirmPassword) {
-      Alert.alert("Erro", "As senhas não coincidem!");
+  const handleSignUp = async () => {
+    // Validação do e-mail e das senhas
+    if (!email.includes("@")) {
+      setErrorMessage("Por favor, insira um e-mail válido que contenha '@'.");
+      setModalVisible(true);
       return;
     }
-    // Continue com o processo de cadastro
+
+    if (password !== confirmPassword) {
+      setErrorMessage("As senhas não coincidem!");
+      setModalVisible(true);
+      return;
+    }
+
+    try {
+      // Criar o usuário no Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Armazenar dados do usuário no Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        createdAt: serverTimestamp(),
+      });
+
+      setErrorMessage(""); // Limpa a mensagem de erro
+      setModalVisible(false); // Fecha o modal se estava aberto
+      Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error(error);
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          setErrorMessage("O e-mail já está em uso!");
+          break;
+        case 'auth/invalid-email':
+          setErrorMessage("O e-mail inserido não é válido!");
+          break;
+        case 'auth/weak-password':
+          setErrorMessage("A senha é muito fraca! Por favor, use uma senha mais forte.");
+          break;
+        default:
+          setErrorMessage("Ocorreu um erro ao tentar criar o usuário.");
+          break;
+      }
+      setModalVisible(true); // Abre o modal para mostrar o erro
+    }
   };
 
   return (
@@ -62,6 +106,8 @@ export default function Cadastro() {
               placeholderTextColor={"#E6E3F6"}
               keyboardType="email-address"
               autoCapitalize="none"
+              value={email}
+              onChangeText={setEmail}
             />
           </View>
         </View>
@@ -142,6 +188,28 @@ export default function Cadastro() {
             <Text style={styles.txt_btEntrar}>Cadastre-se</Text>
           </View>
         </TouchableOpacity>
+
+        {/* Modal para exibir mensagens de erro */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>{errorMessage}</Text>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>Fechar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     </KeyboardAwareScrollView>
   );
@@ -191,7 +259,6 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontFamily: "BreeSerif_400Regular",
     color: "#FFFF",
-    //Sombra IOS
     shadowColor: "#0003",
     shadowOffset: { width: 2, height: 4 },
     shadowOpacity: 3,
@@ -225,32 +292,49 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    //Sombra IOS
     shadowColor: "#0003",
     shadowOffset: { width: 2, height: 4 },
     shadowOpacity: 3,
     shadowRadius: 1,
   },
   txt_btEntrar: {
-    fontSize: 40,
-    fontFamily: "BreeSerif_400Regular",
     color: "#FFFF",
+    fontFamily: "BreeSerif_400Regular",
+    fontSize: 24,
   },
   footer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#CAC1F9",
-    width: "98%",
-    height: 160,
-    borderBottomLeftRadius: 50,
-    borderBottomRightRadius: 50,
+    marginTop: 100,
   },
   txt_footer: {
-    fontSize: 60,
     fontFamily: "BreeSerif_400Regular",
-    color: "#FFFF",
-    letterSpacing: 3,
-    top: 10,
+    fontSize: 70,
+    color: "#FFF",
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Cor do fundo do modal
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  modalButton: {
+    backgroundColor: "#A397E3",
+    padding: 10,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: "white",
+    fontSize: 16,
   },
 });
