@@ -8,6 +8,7 @@ import Graph from "./teste";
 import GerarDieta from "./src/Telas/GerarDieta/gerarDieta";
 import Perfil from "./src/Telas/Perfil/perfil";
 import EditarPerfil from "./src/Telas/EditarPerfil/editarperfil";
+import MinhasInformacoes from "./src/Telas/MinhasInformacoes/minhasinformacoes";
 
 const Stack = createStackNavigator();
 
@@ -15,7 +16,7 @@ function MyStack() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="EditarPerfil"
+        initialRouteName="MinhasInformacoes"
         screenOptions={{
           headerShown: false,
           cardStyle: { backgroundColor: "#E6E3F5" },
@@ -30,6 +31,7 @@ function MyStack() {
         <Stack.Screen name="GerarDieta" component={GerarDieta} />
         <Stack.Screen name="Perfil" component={Perfil} />
         <Stack.Screen name="EditarPerfil" component={EditarPerfil} />
+        <Stack.Screen name="MinhasInformacoes" component={MinhasInformacoes} />
       </Stack.Navigator>
     </NavigationContainer>
   );
