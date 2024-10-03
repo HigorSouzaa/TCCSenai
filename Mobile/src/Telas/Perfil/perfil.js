@@ -89,7 +89,9 @@ export default function Perfil() {
             <Text style={styles.txtBt}>Edite seu Perfil</Text>
           </ImageBackground>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("MinhasInformacoes")}
+        >
           <ImageBackground
             source={require("../../../assets/background2.png")} // Substitua pelo caminho da sua imagem
             style={styles.conteiner_bt2}
@@ -103,7 +105,7 @@ export default function Perfil() {
             <Text style={styles.txtBt}>Minhas Informações</Text>
           </ImageBackground>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("DietaDiaria")}>
           <ImageBackground
             source={require("../../../assets/background3.png")} // Substitua pelo caminho da sua imagem
             style={styles.conteiner_bt3}
