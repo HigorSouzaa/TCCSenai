@@ -351,4 +351,8 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: "BreeSerif_400Regular",
   },
+
+  
+
+
 });
