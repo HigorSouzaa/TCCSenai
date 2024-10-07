@@ -1,3 +1,4 @@
+// Login.js
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -6,61 +7,70 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Modal,
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { auth } from '../../Config/Firebase/firebase'; // Importando o auth do Firebase
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { db } from "../../Config/Firebase/firebase"; // Verifique o caminho aqui
+import { doc, getDoc } from "firebase/firestore";
 
 export default function Login() {
   const navigation = useNavigation();
-  const [fontsLoaded] = useFonts({
-    BreeSerif_400Regular,
-  });
+  const [fontsLoaded] = useFonts({ BreeSerif_400Regular });
 
-  const [email, setEmail] = useState("");  // Adicionando estados para email e senha
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");  // Estado para armazenar mensagens de erro
+  const [errorMessage, setErrorMessage] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   if (!fontsLoaded) {
-    return null;
+    return null; // Adicionar componente de carregamento opcional
   }
 
-  // Função para realizar o login com feedback de erros
   const handleLogin = async () => {
     if (!email || !password) {
-      setErrorMessage("Por favor, preencha todos os campos.");  // Exibir mensagem se os campos estiverem vazios
+      setErrorMessage("Por favor, preencha todos os campos.");
+      setModalVisible(true);
       return;
     }
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      Alert.alert("Sucesso", `Bem-vindo ${user.email}`);
-      navigation.navigate('Home');  // Navegar para a tela principal após o login
-    } catch (error) {
-      // Verificando o tipo de erro para dar feedback ao usuário
-      if (error.code === 'auth/user-not-found') {
-        setErrorMessage("Usuário não cadastrado!");
-      } else if (error.code === 'auth/wrong-password') {
-        setErrorMessage("Senha incorreta!");
-      } else if (error.code === 'auth/invalid-email') {
-        setErrorMessage("Email inválido!");
+      // Buscar dados do usuário no Firestore
+      const userDoc = await getDoc(doc(db, "usuarios", email)); // Mudado para "usuarios"
+      if (userDoc.exists()) {
+        // Verificar se a senha fornecida corresponde à armazenada
+        if (userDoc.data().password === password) {
+          // Verificando a senha
+          console.log("Dados do usuário:", userDoc.data());
+          Alert.alert("Sucesso", `Bem-vindo ${userDoc.data().email}`); // Mudado para email
+          navigation.navigate("Home");
+        } else {
+          setErrorMessage("Senha incorreta!");
+          setModalVisible(true);
+        }
       } else {
-        setErrorMessage("Usuario ou senha invalido!");
+        setErrorMessage("Usuário não encontrado!");
+        setModalVisible(true);
       }
+    } catch (error) {
+      console.error("Erro ao buscar dados do Firestore:", error);
+      setErrorMessage("Ocorreu um erro ao tentar buscar os dados.");
+      setModalVisible(true);
     }
   };
 
   return (
     <KeyboardAwareScrollView>
       <View style={styles.conteiner}>
+        <View style={styles.footer}>
+          <Text style={styles.txt_footer}>Login</Text>
+        </View>
         <Image
           source={require("../../../assets/imgLogoHome.png")}
-          style={{ width: 340, marginTop: 140 }}
+          style={{ width: 340, marginTop: 50 }}
           resizeMode="contain"
         />
         <View style={styles.conteinerInputs}>
@@ -77,11 +87,12 @@ export default function Login() {
               placeholderTextColor={"#E6E3F6"}
               keyboardType="email-address"
               autoCapitalize="none"
-              value={email}  // Ligando o estado do email
-              onChangeText={setEmail}  // Atualizando o estado do email
+              value={email}
+              onChangeText={setEmail}
             />
           </View>
         </View>
+
         <View style={styles.conteinerInput}>
           <Text style={styles.txtInputs}>Senha:</Text>
           <View style={styles.Inputs}>
@@ -95,8 +106,8 @@ export default function Login() {
               placeholder="**********"
               placeholderTextColor={"#E6E3F6"}
               secureTextEntry={!passwordVisible}
-              value={password}  // Ligando o estado da senha
-              onChangeText={setPassword}  // Atualizando o estado da senha
+              value={password}
+              onChangeText={setPassword}
             />
             <TouchableOpacity
               onPress={() => setPasswordVisible(!passwordVisible)}
@@ -114,25 +125,28 @@ export default function Login() {
           </View>
         </View>
 
-        {/* Exibir mensagem de erro, se houver */}
-        {errorMessage ? (
-          <Text style={styles.errorText}>{errorMessage}</Text>
-        ) : null}
-
         <View style={styles.conteiner_restaurarSenha}>
-          <Text style={styles.text_recuperarSenha}>Recuperar senha </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("RecuperarSenha")}>
-            <Text style={styles.highlight}>clique aqui!</Text>
+          <Text style={styles.text_recuperarSenha}>Não tem conta? Faça </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Cadastro")}>
+            <Text style={styles.highlight}>cadastro!</Text>
           </TouchableOpacity>
         </View>
+
         <TouchableOpacity style={styles.btEntrar} onPress={handleLogin}>
           <View>
             <Text style={styles.txt_btEntrar}>Entrar</Text>
           </View>
         </TouchableOpacity>
-        <View style={styles.footer}>
-          <Text style={styles.txt_footer}>Login</Text>
-        </View>
+
+        {/* Modal para exibir mensagens de erro */}
+        <Modal visible={modalVisible} animationType="slide">
+          <View style={styles.modalContainer}>
+            <Text style={styles.errorText}>{errorMessage}</Text>
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeButton}>Fechar</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </View>
     </KeyboardAwareScrollView>
   );
@@ -144,6 +158,20 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    flex: 1,
+  },
+  footer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#CAC1F9",
+    width: "100%",
+    height: 80,
+  },
+  txt_footer: {
+    fontSize: 40,
+    fontFamily: "BreeSerif_400Regular",
+    color: "#FFFF",
   },
   conteinerInputs: {
     width: "80%",
@@ -179,32 +207,9 @@ const styles = StyleSheet.create({
   },
   txtInputs: {
     marginBottom: 3,
-    fontSize: 40,
+    fontSize: 20,
     fontFamily: "BreeSerif_400Regular",
     color: "#FFFF",
-    shadowColor: "#0003",
-    shadowOffset: { width: 2, height: 4 },
-    shadowOpacity: 3,
-    shadowRadius: 1,
-  },
-  conteiner_restaurarSenha: {
-    width: "80%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    marginRight: 15,
-    marginTop: 8,
-  },
-  highlight: {
-    color: "#A397E3",
-    fontFamily: "BreeSerif_400Regular",
-    fontSize: 16,
-  },
-  text_recuperarSenha: {
-    color: "#CAC1F9",
-    fontFamily: "BreeSerif_400Regular",
-    fontSize: 16,
   },
   btEntrar: {
     marginTop: 50,
@@ -215,37 +220,31 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    shadowColor: "#0003",
-    shadowOffset: { width: 2, height: 4 },
-    shadowOpacity: 3,
-    shadowRadius: 1,
   },
   txt_btEntrar: {
-    fontSize: 40,
+    fontSize: 20,
     fontFamily: "BreeSerif_400Regular",
     color: "#FFFF",
   },
-  footer: {
-    display: "flex",
-    alignItems: "center",
+  modalContainer: {
+    flex: 1,
     justifyContent: "center",
-    backgroundColor: "#CAC1F9",
-    width: "98%",
-    height: 230,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    top: 100,
-  },
-  txt_footer: {
-    fontSize: 60,
-    fontFamily: "BreeSerif_400Regular",
-    color: "#FFFF",
-    bottom: 56,
-    letterSpacing: 3,
+    alignItems: "center",
+    backgroundColor: "#FFF",
+    padding: 20,
   },
   errorText: {
     color: "red",
     fontSize: 18,
     marginTop: 10,
+    marginBottom: 20,
+  },
+  closeButton: {
+    fontSize: 18,
+    color: "#007BFF",
+  },
+  highlight: {
+    color: "#007BFF",
+    fontWeight: "bold",
   },
 });

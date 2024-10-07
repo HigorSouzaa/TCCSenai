@@ -8,12 +8,12 @@ import {
   TextInput,
   TouchableOpacity,
   Modal,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { auth, db } from '../../Config/Firebase/firebase'; // Verifique o caminho aqui
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { db } from "../../Config/Firebase/firebase"; // Verifique o caminho aqui
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export default function Cadastro() {
@@ -47,36 +47,20 @@ export default function Cadastro() {
     }
 
     try {
-      // Criar o usuário no Firebase Authentication
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
       // Armazenar dados do usuário no Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
+      await setDoc(doc(db, "users", email), {
+        email: email,
+        password: password,
         createdAt: serverTimestamp(),
       });
 
       setErrorMessage(""); // Limpa a mensagem de erro
       setModalVisible(false); // Fecha o modal se estava aberto
       Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
-      navigation.navigate('Login');
+      navigation.navigate("Login");
     } catch (error) {
       console.error(error);
-      switch (error.code) {
-        case 'auth/email-already-in-use':
-          setErrorMessage("O e-mail já está em uso!");
-          break;
-        case 'auth/invalid-email':
-          setErrorMessage("O e-mail inserido não é válido!");
-          break;
-        case 'auth/weak-password':
-          setErrorMessage("A senha é muito fraca! Por favor, use uma senha mais forte.");
-          break;
-        default:
-          setErrorMessage("Ocorreu um erro ao tentar criar o usuário.");
-          break;
-      }
+      setErrorMessage("Ocorreu um erro ao tentar criar o usuário.");
       setModalVisible(true); // Abre o modal para mostrar o erro
     }
   };
@@ -298,23 +282,15 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
   },
   txt_btEntrar: {
-    color: "#FFFF",
-    fontFamily: "BreeSerif_400Regular",
     fontSize: 24,
-  },
-  footer: {
-    marginTop: 100,
-  },
-  txt_footer: {
     fontFamily: "BreeSerif_400Regular",
-    fontSize: 70,
-    color: "#FFF",
+    color: "#FFFF",
   },
   modalOverlay: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Cor do fundo do modal
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
     width: "80%",
@@ -324,9 +300,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalText: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 15,
-    textAlign: "center",
   },
   modalButton: {
     backgroundColor: "#A397E3",
@@ -336,5 +311,22 @@ const styles = StyleSheet.create({
   modalButtonText: {
     color: "white",
     fontSize: 16,
+  },
+
+  footer: {
+    marginTop: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#CAC1F9",
+    width: "98%",
+    height: 190,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+  },
+  txt_footer: {
+    fontFamily: "BreeSerif_400Regular",
+    fontSize: 70,
+    color: "#FFF",
   },
 });
