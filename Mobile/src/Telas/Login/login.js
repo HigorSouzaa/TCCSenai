@@ -1,27 +1,49 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, Image, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { db } from '../../Config/Firebase/fb'; // Importando a configuração do Firestore
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 export default function Login() {
   const navigation = useNavigation();
-  const [fontsLoaded] = useFonts({
-    BreeSerif_400Regular,
-  });
+  const [fontsLoaded] = useFonts({ BreeSerif_400Regular });
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  if (!fontsLoaded) { 
-    return null; 
-  } 
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  const handleLogin = async () => {
+    try {
+      const q = query(collection(db, "usuarios"), where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        Alert.alert("Erro", "Email não encontrado.");
+        return;
+      }
+
+      let user = null;
+      querySnapshot.forEach((doc) => {
+        user = doc.data();
+      });
+
+      if (user.password !== password) {
+        Alert.alert("Erro", "Senha incorreta.");
+      } else {
+        Alert.alert("Sucesso", "Login realizado com sucesso!");
+        navigation.navigate('Home')
+        // Navegar para a tela principal ou qualquer outra tela desejada
+      }
+    } catch (error) {
+      Alert.alert("Erro", error.message);
+    }
+  };
 
   return (
     <KeyboardAwareScrollView>
@@ -43,6 +65,8 @@ export default function Login() {
               fontSize={22}
               placeholder="seu@email.com"
               placeholderTextColor={"#E6E3F6"}
+              value={email}
+              onChangeText={setEmail}
             />
           </View>
         </View>
@@ -59,10 +83,10 @@ export default function Login() {
               placeholder="**********"
               placeholderTextColor={"#E6E3F6"}
               secureTextEntry={!passwordVisible}
+              value={password}
+              onChangeText={setPassword}
             />
-            <TouchableOpacity
-              onPress={() => setPasswordVisible(!passwordVisible)}
-            >
+            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
               <Image
                 source={
                   passwordVisible
@@ -77,11 +101,11 @@ export default function Login() {
         </View>
         <View style={styles.conteiner_restaurarSenha}>
           <Text style={styles.text_recuperarSenha}>recupera a senha </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {navigation.navigate('InsiraEmail')}}>
             <Text style={styles.highlight}>clique aqui!</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.btEntrar}>
+        <TouchableOpacity style={styles.btEntrar} onPress={handleLogin}>
           <View>
             <Text style={styles.txt_btEntrar}>Entrar</Text>
           </View>
@@ -139,7 +163,6 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontFamily: "BreeSerif_400Regular",
     color: "#FFFF",
-    //Sombra IOS
     shadowColor: "#0003",
     shadowOffset: { width: 2, height: 4 },
     shadowOpacity: 3,
@@ -177,7 +200,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    //Sombra IOS
     shadowColor: "#0003",
     shadowOffset: { width: 2, height: 4 },
     shadowOpacity: 3,
@@ -206,7 +228,7 @@ const styles = StyleSheet.create({
     fontSize: 60,
     fontFamily: "BreeSerif_400Regular",
     color: "#FFFF",
-    bottom: 56  ,
-    letterSpacing: 3
+    bottom: 56,
+    letterSpacing: 3,
   },
 });
