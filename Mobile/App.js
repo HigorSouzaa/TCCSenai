@@ -12,6 +12,7 @@ import MinhasInformacoes from "./src/Telas/MinhasInformacoes/minhasinformacoes";
 import DietaDiaria from "./src/Telas/DietaDieta/dietadiaria";
 import RecuperarSenha from "./src/Telas/RecuperarSenha/recuperarsenha";
 import MudarSenha from "./src/Telas/MudarSenha/mudarsenha";
+import InsiraEmail from "./src/Telas/InsiraEmail/insiraEmail";
 
 const Stack = createStackNavigator();
 
@@ -19,7 +20,7 @@ function MyStack() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="MudarSenha"
+        initialRouteName="Main"
         screenOptions={{
           headerShown: false,
           cardStyle: { backgroundColor: "#E6E3F5" },
@@ -38,6 +39,7 @@ function MyStack() {
         <Stack.Screen name="DietaDiaria" component={DietaDiaria} />
         <Stack.Screen name="RecuperarSenha" component={RecuperarSenha} />
         <Stack.Screen name="MudarSenha" component={MudarSenha} />
+        <Stack.Screen name="InsiraEmail" component={InsiraEmail} />
       </Stack.Navigator>
     </NavigationContainer>
   );
