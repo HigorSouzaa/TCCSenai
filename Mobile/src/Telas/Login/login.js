@@ -1,5 +1,6 @@
 // Login.js
 import React, { useState } from "react";
+<<<<<<< HEAD
 import {
   StyleSheet,
   View,
@@ -15,6 +16,14 @@ import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { db } from "../../Config/Firebase/firebase"; // Verifique o caminho aqui
 import { doc, getDoc } from "firebase/firestore";
+=======
+import { StyleSheet, View, Image, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { db } from '../../Config/Firebase/fb'; // Importando a configuração do Firestore
+import { collection, getDocs, query, where } from 'firebase/firestore';
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
 
 export default function Login() {
   const navigation = useNavigation();
@@ -27,6 +36,7 @@ export default function Login() {
   const [modalVisible, setModalVisible] = useState(false);
 
   if (!fontsLoaded) {
+<<<<<<< HEAD
     return null; // Adicionar componente de carregamento opcional
   }
 
@@ -59,6 +69,35 @@ export default function Login() {
       console.error("Erro ao buscar dados do Firestore:", error);
       setErrorMessage("Ocorreu um erro ao tentar buscar os dados.");
       setModalVisible(true);
+=======
+    return null;
+  }
+
+  const handleLogin = async () => {
+    try {
+      const q = query(collection(db, "usuarios"), where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        Alert.alert("Erro", "Email não encontrado.");
+        return;
+      }
+
+      let user = null;
+      querySnapshot.forEach((doc) => {
+        user = doc.data();
+      });
+
+      if (user.password !== password) {
+        Alert.alert("Erro", "Senha incorreta.");
+      } else {
+        Alert.alert("Sucesso", "Login realizado com sucesso!");
+        navigation.navigate('Home')
+        // Navegar para a tela principal ou qualquer outra tela desejada
+      }
+    } catch (error) {
+      Alert.alert("Erro", error.message);
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
     }
   };
 
@@ -85,8 +124,11 @@ export default function Login() {
               fontSize={22}
               placeholder="seu@email.com"
               placeholderTextColor={"#E6E3F6"}
+<<<<<<< HEAD
               keyboardType="email-address"
               autoCapitalize="none"
+=======
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
               value={email}
               onChangeText={setEmail}
             />
@@ -109,9 +151,7 @@ export default function Login() {
               value={password}
               onChangeText={setPassword}
             />
-            <TouchableOpacity
-              onPress={() => setPasswordVisible(!passwordVisible)}
-            >
+            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
               <Image
                 source={
                   passwordVisible
@@ -126,12 +166,20 @@ export default function Login() {
         </View>
 
         <View style={styles.conteiner_restaurarSenha}>
+<<<<<<< HEAD
           <Text style={styles.text_recuperarSenha}>Não tem conta? Faça </Text>
           <TouchableOpacity onPress={() => navigation.navigate("Cadastro")}>
             <Text style={styles.highlight}>cadastro!</Text>
           </TouchableOpacity>
         </View>
 
+=======
+          <Text style={styles.text_recuperarSenha}>recupera a senha </Text>
+          <TouchableOpacity onPress={() => {navigation.navigate('InsiraEmail')}}>
+            <Text style={styles.highlight}>clique aqui!</Text>
+          </TouchableOpacity>
+        </View>
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
         <TouchableOpacity style={styles.btEntrar} onPress={handleLogin}>
           <View>
             <Text style={styles.txt_btEntrar}>Entrar</Text>
@@ -210,6 +258,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "BreeSerif_400Regular",
     color: "#FFFF",
+<<<<<<< HEAD
+=======
+    shadowColor: "#0003",
+    shadowOffset: { width: 2, height: 4 },
+    shadowOpacity: 3,
+    shadowRadius: 1,
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
   },
   btEntrar: {
     marginTop: 50,
@@ -220,6 +275,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
+<<<<<<< HEAD
+=======
+    shadowColor: "#0003",
+    shadowOffset: { width: 2, height: 4 },
+    shadowOpacity: 3,
+    shadowRadius: 1,
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
   },
   txt_btEntrar: {
     fontSize: 20,
@@ -233,6 +295,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     padding: 20,
   },
+<<<<<<< HEAD
   errorText: {
     color: "red",
     fontSize: 18,
@@ -246,5 +309,14 @@ const styles = StyleSheet.create({
   highlight: {
     color: "#007BFF",
     fontWeight: "bold",
+=======
+
+  txt_footer: {
+    fontSize: 60,
+    fontFamily: "BreeSerif_400Regular",
+    color: "#FFFF",
+    bottom: 56,
+    letterSpacing: 3,
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
   },
 });

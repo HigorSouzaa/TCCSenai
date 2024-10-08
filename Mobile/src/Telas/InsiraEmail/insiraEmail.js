@@ -11,8 +11,21 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+<<<<<<< HEAD
 import { auth } from "../../Config/Firebase/firebase"; // Usando a configuração correta
 import { fetchSignInMethodsForEmail } from "firebase/auth"; // Importando corretamente
+=======
+import emailjs from "emailjs-com"; // Certifique-se de instalar a biblioteca emailjs
+import { db } from "../../Config/Firebase/fb"; // Importando a configuração do Firestore
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  setDoc,
+} from "firebase/firestore"; // Importando métodos do Firestore
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
 
 export default function InsiraEmail() {
   const navigation = useNavigation();
@@ -27,12 +40,22 @@ export default function InsiraEmail() {
     return null;
   }
 
+<<<<<<< HEAD
+=======
+  // Gera um código de 6 dígitos
+  const generateCode = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  };
+
+  // Função para lidar com o envio do código
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
   const handleSendCode = async () => {
     if (!email) {
       setErrorMessage("Por favor, insira seu email.");
       return;
     }
 
+<<<<<<< HEAD
     console.log("Email enviado para verificação:", email); // Log para verificar o valor do email
 
     try {
@@ -54,6 +77,53 @@ export default function InsiraEmail() {
       } else {
         setErrorMessage("Erro ao verificar o email. Tente novamente.");
       }
+=======
+    console.log("Tentando enviar código para o email:", email);
+
+    const code = generateCode(); // Gere o código de recuperação
+
+    try {
+      // Referência para a coleção 'usuarios'
+      const usuariosRef = collection(db, "usuarios");
+
+      // Cria uma query para buscar o documento com o email fornecido
+      const q = query(usuariosRef, where("email", "==", email));
+
+      // Executa a query
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        setErrorMessage("Usuário não encontrado.");
+        return;
+      }
+
+      // Salvar o código no Firestore na coleção 'passwordResets'
+      await setDoc(doc(db, "passwordResets", email), {
+        code: code,
+        createdAt: new Date(), // Salvando o timestamp
+      });
+
+      // Parâmetros para o template do EmailJS
+      const templateParams = {
+        to_email: email, // O e-mail do destinatário
+        code: code, // O código de 6 dígitos gerado
+      };
+
+      // Envie o e-mail usando EmailJS
+      await emailjs.send(
+        "service_aq2ec2e", // Substitua pelo seu ID de serviço
+        "template_f2xtvih", // Substitua pelo seu ID de template
+        templateParams,
+        "t_Xxs3v0auAAChNhF" // Substitua pela sua chave pública
+      );
+
+      // Exibe um alerta de sucesso e navega para a próxima tela
+      Alert.alert("Sucesso", `Código enviado para ${email}`);
+      navigation.navigate("RecuperarSenha", { email: email });
+    } catch (error) {
+      console.log("Erro ao verificar o email ou enviar o código:", error);
+      setErrorMessage("Erro ao enviar o código. Tente novamente.");
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
     }
   };
 
@@ -80,17 +150,27 @@ export default function InsiraEmail() {
               keyboardType="email-address"
               autoCapitalize="none"
               value={email}
+<<<<<<< HEAD
               onChangeText={setEmail}
+=======
+              onChangeText={(text) => {
+                setEmail(text);
+                setErrorMessage(""); // Limpar mensagem de erro ao digitar
+              }}
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
             />
           </View>
         </View>
 
         {errorMessage ? (
           <View style={styles.errorContainer}>
+<<<<<<< HEAD
             <Image
               source={require("../../../assets/errorIcon.png")} // Certifique-se de que o caminho está correto
               style={styles.errorIcon}
             />
+=======
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
             <Text style={styles.errorText}>{errorMessage}</Text>
           </View>
         ) : null}
@@ -182,11 +262,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
+<<<<<<< HEAD
   errorIcon: {
     width: 24, // Ajuste o tamanho conforme necessário
     height: 24, // Ajuste o tamanho conforme necessário
     marginRight: 10,
   },
+=======
+>>>>>>> 4134181ea3e94901d131d380758d9775c6721599
   errorText: {
     color: "red",
     fontSize: 18,
