@@ -7,12 +7,17 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native"; // Importando useRoute
 import { useFonts, BreeSerif_400Regular } from "@expo-google-fonts/bree-serif";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { db } from "../../Config/Firebase/fb"; // Importando a configuração do Firebase
+import { collection, query, where, getDocs, setDoc } from "firebase/firestore";
 
 export default function MudarSenha() {
   const navigation = useNavigation();
+  const route = useRoute(); // Usando useRoute para acessar os parâmetros da navegação
+  const { email } = route.params; // Obtendo o email passado da tela anterior
+
   const [fontsLoaded] = useFonts({
     BreeSerif_400Regular,
   });
@@ -35,13 +40,34 @@ export default function MudarSenha() {
     setRepeatPasswordVisible(!repeatPasswordVisible);
   };
 
-  const handleRecuperarSenha = () => {
+  const handleRecuperarSenha = async () => {
+    console.log(email);
     if (newPassword !== repeatPassword) {
       setErrorMessage("As senhas não são iguais");
     } else {
       setErrorMessage("");
-      // Lógica para processar a mudança de senha
-      console.log("Senha alterada com sucesso!");
+
+      // Crie uma query para buscar o documento onde o campo 'email' é igual ao email fornecido
+      const usersRef = collection(db, "usuarios"); // Referência à coleção de usuários
+      const q = query(
+        usersRef,
+        where("email", "==", email.trim().toLowerCase())
+      ); // Query para buscar o email
+
+      const querySnapshot = await getDocs(q); // Executa a query
+
+      if (!querySnapshot.empty) {
+        // Atualiza a senha do usuário para o primeiro documento encontrado
+        const userDocRef = querySnapshot.docs[0].ref; // Referência ao primeiro documento encontrado
+        await setDoc(userDocRef, { password: newPassword }, { merge: true });
+        console.log("Senha alterada com sucesso!");
+        setErrorMessage("Senha alterada com sucesso!");
+        setTimeout(() => {
+          navigation.navigate("Login");
+        }, 2000);
+      } else {
+        setErrorMessage("Usuário não encontrado.");
+      }
     }
   };
 
